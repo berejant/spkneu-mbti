@@ -11,22 +11,14 @@
 
         <link rel="stylesheet" href="css/main.css" />
     </head>
-    <body style="display:none;">
-        <div class="app">
-            <div class="navbar navbar-app navbar-absolute-top">
-                <div class="navbar-brand navbar-brand-center" ui-yield-to="title">
-                    MBTI
-                </div>
-            </div>
+    <body style="display:none">
 
-            <div class="navbar navbar-app navbar-absolute-bottom">
-                <div class="btn-group justified">
-                    
-                </div>
-            </div>
+        <ion-nav-bar class="bar-stable">
+            <ion-nav-back-button>
+            </ion-nav-back-button>
+        </ion-nav-bar>
 
-            <div class="app-body" ng-view></div>
-        </div>
+        <ion-nav-view></ion-nav-view>
 
         <script src="lib/requirejs/require.js" data-main="js/main.js"></script>
     </body>

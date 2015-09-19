@@ -1,0 +1,8 @@
+{
+  "title": "MBTI",
+  "oauth": {
+    "clientId": 8,
+    "url": "https://auth.kneu.edu.ua/oauth"
+  },
+  "debug": false
+}

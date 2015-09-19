@@ -5,14 +5,16 @@ define([
     'angular',
     'app',
     'routes',
-    'domReady'
+    'domReady',
+    'ionic/ionic'
 ], function (require, ng) {
     require([
         'domReady!',
-        'angular-route',
-        'angular-locale-ru',
-        'mobile-angular-ui/mobile-angular-ui',
-        'mobile-angular-ui/mobile-angular-ui.core',
+        'angular-animate',
+        'angular-sanitize',
+        'angular-ui-router',
+        'ionic/ionic-angular',
+        'angular-i18n/angular-locale_uk-ua',
     ], function (document) {
         /*
          * Запуск приложения, после загрузки всех зависимостей и domReady

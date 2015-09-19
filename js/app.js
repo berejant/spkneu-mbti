@@ -12,16 +12,31 @@ define([
      * Run handler - устанавливает базовые переменные
      *
      * @param {angular.$rootScope} $rootScope - The Root Scope
-     * @param {angular.$cookies} $cookies - Angular Cookies Service
-     * @param {angular.$location} $location - Angular Location Service
+     * @param {angular.$state} $state - Angular Location Service
+     * @param {angular.Api} $state - Api Service
      * @ngInject
      */
-    var run = function ($rootScope) {
+    var run = function ($rootScope, $state, Api) {
         $rootScope.title = Config.title;
+
+        $rootScope.$on('$stateChangeStart', function (event, toState) {
+            $rootScope.loading = true;
+
+            if (!Api.isLogged() && toState.name !== 'login') {
+                event.preventDefault();
+                $state.go('login', {}, {location: 'replace'});
+            }
+        });
+
+        $rootScope.$on('$stateChangeSuccess', function () {
+            $rootScope.loading = false;
+        });
+
+
     };
 
     return ng.module('mbti', [
-        'ngRoute',
+        'ionic',
         'mbti.services',
         'mbti.controllers',
         'mbti.filters',

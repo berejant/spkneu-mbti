@@ -1,3 +1,4 @@
 define([
-    './HomeController'
+    './HomeController',
+    './LoginController'
 ], function () {});

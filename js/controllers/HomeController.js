@@ -6,9 +6,11 @@ define(['./module'], function (controllers) {
      * Home Controller
      *
      * @param {angular.$scope} $scope
+     * @param {angular.$state} $state
      * @ngInject
      */
-    var HomeController = function ($scope) {
+    var HomeController = function ($scope, $state, Api) {
+
 
     };
 
