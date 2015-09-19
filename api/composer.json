@@ -1,0 +1,15 @@
+{
+    "name": "berejat/spkneu-mbti",
+    "description": "Психологический тест по методике MBTI",
+    "authors": [
+        {
+            "name": "Anton Berezhnoj",
+            "email": "berejant@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "slim/slim": "2.x-dev",
+        "catfan/medoo": "dev-master"
+    }
+}
