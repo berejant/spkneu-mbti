@@ -20,7 +20,15 @@ define(["./module", 'config'], function (services, Config) {
         var  accessToken = null;
 
         var httpError = function (response) {
-            return $q.reject('Помилка мережі:' + repsonse.status + ' ' + response.statusText);
+            if(500 === response.status && response.data && response.data.error) {
+                return apiError(response.data.error);
+            }
+
+            return $q.reject('Помилка мережі: ' + response.status + ' ' + response.statusText);
+        }
+
+        var apiError = function (error) {
+            return $q.reject('Помилка серверу #' + error.error_code + ': ' + error.error_msg);
         }
 
         var jsonError = function (response) {

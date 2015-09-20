@@ -10,6 +10,18 @@
     "minimum-stability": "dev",
     "require": {
         "slim/slim": "2.x-dev",
-        "catfan/medoo": "dev-master"
+        "catfan/medoo": "dev-master",
+        "robmorgan/phinx": "dev-master",
+        "packagist/closurecompiler-bin": "dev-master",
+        "ext-pdo": "*",
+        "ext-json": "*"
+    },
+    "suggest": {
+        "java": "For use closure compiler"
+    },
+    "autoload": {
+        "psr-4": {
+            "": "classes"
+        }
     }
 }

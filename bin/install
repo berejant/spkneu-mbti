@@ -1,0 +1,39 @@
+#!/bin/bash
+
+cd `dirname ${BASH_SOURCE[0]}` ;
+cd ..;
+
+# front end components
+if hash bower 2>/dev/null
+then
+    bower install
+else
+    echo 'Bower not installed. You can use only minified resource'
+fi
+
+cd api
+
+# back end components
+if hash composer 2>/dev/null
+then
+    composer install --optimize-autoloader
+else
+
+    if [ ! -e composer.phar ]
+    then
+        curl -sS https://getcomposer.org/installer | php
+    fi
+
+    ./composer.phar install --optimize-autoloader
+fi
+
+if [ ! -e config/database.php ]
+then
+    cp config/database.sample.php config/database.php
+fi
+
+if [ ! -e config/api.php ]
+then
+    cp config/api.sample.php config/api.php
+fi
+
