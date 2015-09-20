@@ -6,7 +6,7 @@ cd ..;
 # front end components
 if hash bower 2>/dev/null
 then
-    bower install
+    bower install --quiet
 else
     echo 'Bower not installed. You can use only minified resource'
 fi
@@ -16,7 +16,7 @@ cd api
 # back end components
 if hash composer 2>/dev/null
 then
-    composer install --optimize-autoloader
+    composer install --optimize-autoloader --no-interaction
 else
 
     if [ ! -e composer.phar ]
@@ -24,7 +24,7 @@ else
         curl -sS https://getcomposer.org/installer | php
     fi
 
-    ./composer.phar install --optimize-autoloader
+    ./composer.phar install --optimize-autoloader --no-interaction
 fi
 
 if [ ! -e config/database.php ]
