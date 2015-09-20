@@ -2,5 +2,5 @@ api/vendor
 lib
 .idea
 api/composer.phar
-api/config/datebases.php
+api/config/database.php
 api/config/api.php
