@@ -1,6 +1,6 @@
 <?php
 
-class CurlException extends Exception
+class CurlException extends \Exception
 {
     /**
      * @param resource $ch Resource of Curl

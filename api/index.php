@@ -2,11 +2,11 @@
 
 require 'vendor/autoload.php';
 
-$db = new medoo(Config::database());
-
 $app = new \Slim\Slim([
     'debug' => false
 ]);
+
+$app->db = new medoo(Config::database());
 
 $app->error(function (\Exception $e) use ($app) {
     Helpers::sendJson([
@@ -27,12 +27,19 @@ $app->notFound(function() use($app) {
 });
 
 
-$app->get('/getAccessToken', function () use ($app, $db) {
+$app->get('/getAccessToken', function () use ($app) {
     $code = $app->request->get('code');
     $redirect_uri = $app->request->get('redirect_uri');
 
-    $user = KneuApi::getInstance()->getAccessToken($code, $redirect_uri);
+    $client = Config::oauth();
 
+    $api = new Kneu\Api;
+    $token = $api->oauthToken($client['id'], $client['secret'], $code, $redirect_uri);
+
+    var_dump($token);
+
+    $user = $api->getUser();
+    var_dump($user);
 });
 
 $app->run();

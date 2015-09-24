@@ -3,4 +3,4 @@ lib
 .idea
 api/composer.phar
 api/config/database.php
-api/config/api.php
+api/config/oauth.php

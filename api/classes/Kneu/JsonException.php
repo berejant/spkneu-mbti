@@ -1,6 +1,6 @@
 <?php
 
-class JsonException extends Exception
+class JsonException extends \Exception
 {
     public function __construct ()
     {

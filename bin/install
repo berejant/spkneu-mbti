@@ -32,8 +32,8 @@ then
     cp config/database.sample.php config/database.php
 fi
 
-if [ ! -e config/api.php ]
+if [ ! -e config/oauth.php ]
 then
-    cp config/api.sample.php config/api.php
+    cp config/oauth.sample.php config/oauth.php
 fi
 
