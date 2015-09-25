@@ -13,7 +13,7 @@
         "catfan/medoo": "dev-master",
         "robmorgan/phinx": "dev-master",
         "packagist/closurecompiler-bin": "dev-master",
-        "ext-pdo": "*",
+        "kneu/api": "dev-master",
         "ext-json": "*"
     },
     "suggest": {
