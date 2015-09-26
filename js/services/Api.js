@@ -10,16 +10,26 @@ define(["./module", 'config'], function (services, Config) {
      * @param {angular.$http} $http
      * @param {angular.$q} $q
      * @param {angular.localStorageService} localStorageService
+     * @param {angualr.$state} $state
      * @ngInject
      * @constructor
      */
     var Api;
 
-    Api = function ($http, $q, localStorageService) {
+    Api = function ($http, $q, localStorageService, $state) {
 
         var httpError = function (response) {
             if(500 === response.status && response.data && response.data.error) {
                 return apiError(response.data.error);
+            }
+
+            if(401 === response.status)
+            {// сессия истекла
+                session.expire = 0;
+                service.isLogged();
+                $state.go('home', {}, {location:'replace'});
+
+                return sessionError();
             }
 
             return $q.reject('Помилка мережі: ' + response.status + ' ' + response.statusText);
@@ -31,6 +41,10 @@ define(["./module", 'config'], function (services, Config) {
 
         var jsonError = function (response) {
             return $q.reject('Некорректна відповідь сервера');
+        }
+
+        var sessionError = function (error) {
+            return $q.reject('Авторизуйтесь повторно');
         }
 
         var getHttpRequest = function () {
