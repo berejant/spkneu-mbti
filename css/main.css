@@ -1,6 +1,28 @@
 @import url("../lib/ionic/release/css/ionic.css");
 
 
+.test-view .item-radio .item-content {
+    padding-left: 3px;
+    padding-right: 28px;
+}
+
 .test-view .item-radio input:checked ~ .item-content {
     background-color: #BAFFBC;
+}
+
+.bar .button.next-button {
+    transform: translate3d(0px, 0px, 0px);
+    font-weight:normal;
+}
+
+.bar .button.next-button span {
+    display: inline-block;
+}
+
+.card-use-mouse {
+    display: inline-block;
+}
+
+.card-use-mouse .item {
+    background-color: #DEF7F7;
 }

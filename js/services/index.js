@@ -1,5 +1,6 @@
 define([
     './Oauth',
-    './Api'
+    './Api',
+    './Testing'
 ], function () {
 });

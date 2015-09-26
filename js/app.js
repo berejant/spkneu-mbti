@@ -39,14 +39,22 @@ define([
             $rootScope.loading = false;
         });
 
+        $rootScope.hasMouse = false;
 
+        angular.element(document.body).one('mousemove', function(){
+            $rootScope.hasMouse = true;
+            $rootScope.$apply();
+        })
     };
 
     /**
+     * @param {angular.$ionicConfigProvider} $ionicConfigProvider
      * @param {angular.localStorageServiceProvider} localStorageServiceProvider
      * @ngInject
      */
-    var storageConfig = function(localStorageServiceProvider) {
+    var сonfig = function($ionicConfigProvider, localStorageServiceProvider) {
+        $ionicConfigProvider.backButton.text('Назад').previousTitleText(false);
+
         localStorageServiceProvider
             .setPrefix('mbti')
             .setStorageType('sessionStorage')
@@ -60,5 +68,5 @@ define([
         'mbti.controllers',
         'mbti.filters',
         'mbti.directives'
-    ]).config(storageConfig).run(run);
+    ]).config(сonfig).run(run);
 });

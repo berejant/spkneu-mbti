@@ -1,5 +1,13 @@
-<ion-view view-title="{{title}} - Тестування" class="test-view text-center" hide-back-button="{{hideBackButton}}">
-    <ion-content>
+<ion-view view-title="Питання #{{question.id}}" class="test-view text-center" hide-back-button="{{hideBackButton}}">
+
+    <ion-nav-buttons side="secondary">
+        <button ng-click="next()" ng-show="question.selectedAnswer" class="button button-clear header-item next-button">
+            <span class="bact">Далі</span>
+            <i class="icon icon-right ion-ios-arrow-forward"></i>
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content scroll="false">
 
         <div class="card">
 
@@ -8,13 +16,26 @@
                 <i class="icon ion-help"></i>
             </div>
 
-            <label class="item item-radio" ng-repeat="(answerId, answer) in question.answers">
+            <label class="item item-radio" ng-repeat="(answerId, answer) in question.answers" ng-dblclick="next();">
                 <input type="radio" name="answer" ng-model="question.selectedAnswer" ng-value="answerId">
                 <div class="item-content item-text-wrap" ng-bind="answer.text"></div>
                 <i class="radio-icon ion-checkmark"></i>
             </label>
 
         </div>
+
+        <button class="button icon icon-right ion-ios-arrow-forward" ng-click="next()" ng-disabled="!question.selectedAnswer">
+            Наступне питанння
+        </button>
+
+        <div ng-if="hasMouse">
+            <div class="card card-use-mouse">
+                <div class="item item-text-wrap">
+                    <i class="icon ion-information-circled"></i>
+                    Подвійний клік на відповіді - для переходу до наступного питання
+                </div>
+            </div>
+       </div>
 
     </ion-content>
 </ion-view>

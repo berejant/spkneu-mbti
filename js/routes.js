@@ -32,9 +32,12 @@ define([
                 controller: 'LoginController'
             })
             .state('test', {
-                url: "/test",
+                url: "/test/:questionId",
                 template: testTemplate,
-                controller: 'TestController'
+                controller: 'TestController',
+                params: {
+                    questionId: 1
+                }
             })
     };
 

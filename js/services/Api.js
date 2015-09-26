@@ -5,12 +5,12 @@ var angular;
 define(["./module", 'config'], function (services, Config) {
 
     /**
-     * Api
+     * Взаимодействие с серверов
      *
      * @param {angular.$http} $http
      * @param {angular.$q} $q
      * @param {angular.localStorageService} localStorageService
-     * @param {angualr.$state} $state
+     * @param {angular.$state} $state
      * @ngInject
      * @constructor
      */
@@ -24,7 +24,7 @@ define(["./module", 'config'], function (services, Config) {
             if(401 === response.status)
             {// сессия истекла
                 session.expire = 0;
-                Api.isLogged();
+                service.isLogged();
                 $state.go('home', {}, {location:'replace'});
 
                 return sessionError();
@@ -50,14 +50,14 @@ define(["./module", 'config'], function (services, Config) {
                 method: 'get',
                 url: 'api/',
                 responseType: 'json',
-                headers: Api.isLogged() ? {
+                headers: service.isLogged() ? {
                     Authorization: 'Bearer ' + session.token
                 } : null,
 
             };
         };
 
-        var Api = {};
+        var service = {};
 
         var session = localStorageService.get('session');
 
@@ -66,7 +66,7 @@ define(["./module", 'config'], function (services, Config) {
          *
          * @return {boolean}
          */
-        Api.isLogged = function () {
+        service.isLogged = function () {
             if(session && session.expire * 1E3 < (new Date).getTime()) {
                 localStorageService.remove('session');
                 session = null;
@@ -75,7 +75,7 @@ define(["./module", 'config'], function (services, Config) {
             return !!(session && session.token);
         };
 
-        Api.isLogged();
+        service.isLogged();
 
         /**
          *
@@ -83,7 +83,7 @@ define(["./module", 'config'], function (services, Config) {
          * @param {string} redirect_uri
          * @returns {angular.Promise}
          */
-        Api.login = function (code, redirect_uri) {
+        service.login = function (code, redirect_uri) {
 
             var request = getHttpRequest();
 
@@ -110,7 +110,11 @@ define(["./module", 'config'], function (services, Config) {
         /**
          * Получить ответы пользователя
          */
-        Api.getAnswers = function() {
+        service.getAnswers = function() {
+
+            if(typeof session.answers !== "undefined") {
+                return $q.when(session.answers);
+            }
 
             var request = getHttpRequest();
 
@@ -122,11 +126,13 @@ define(["./module", 'config'], function (services, Config) {
                     return jsonError(response);
                 }
 
-                return response.data;
+                session.answers = response.data;
+
+                return session.answers;
             }, httpError);
         };
 
-        return Api;
+        return service;
     };
 
     services.factory("Api", Api);
