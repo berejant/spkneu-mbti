@@ -76,13 +76,26 @@ $app->get('/login', function () use ($app, $db, $session) {
 });
 
 
-$app->get('/answers', function() use($app, $db, $session) {
+$app->get('/answers', function() use($session) {
 
     if(!checkAuth ()) {
         return;
     }
 
     Helpers::sendJson($session->getUser()->getAnswers());
+});
+
+
+$app->post('/answers', function() use($session) {
+    if(!checkAuth ()) {
+        return;
+    }
+
+    $answers = Helpers::getRequestJson();
+
+    $result = $session->getUser()->saveAnswers($answers);
+
+    Helpers::sendJson($result);
 });
 
 $app->run();

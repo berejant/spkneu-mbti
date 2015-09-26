@@ -39,7 +39,9 @@ define([
         });
 
         $scope.next = function () {
-            if($scope.question.selectedAnswer) {
+            if($scope.question.selectedAnswerId) {
+
+                Testing.saveAnswer($scope.question);
 
                 if (null !== $scope.question.nextId) {
                     $state.go('test', {questionId: $scope.question.nextId});
@@ -48,6 +50,8 @@ define([
                 }
             }
         }
+
+        $scope.questionsCount = Testing.questionsCount;
 
     };
 

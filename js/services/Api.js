@@ -16,9 +16,24 @@ define(["./module", 'config'], function (services, Config) {
      */
     var Api = function ($http, $q, localStorageService, $state) {
 
+        var executeHttp = function (request) {
+            return $http(request).then(function (response) {
+
+                if (null === response.data) {
+                    return jsonError(response);
+                }
+
+                if(response.data.error) {
+                    return apiError(response.data.error);
+                }
+
+                return response.data;
+            }, httpError);
+        }
+
         var httpError = function (response) {
-            if(500 === response.status && response.data && response.data.error) {
-                return apiError(response.data.error);
+            if(500 === response.status) {
+                return apiError(response.data && response.data.error ? response.data.error : null);
             }
 
             if(401 === response.status)
@@ -34,7 +49,11 @@ define(["./module", 'config'], function (services, Config) {
         }
 
         var apiError = function (error) {
-            return $q.reject('Помилка серверу #' + error.error_code + ': ' + error.error_msg);
+            if(error && "offline" === error.error_code) {
+                return $q.reject(error.error_msg);
+            }
+
+            return $q.reject('Помилка серверу' + (error ? ' #' + error.error_code + ': ' + error.error_msg : ''));
         }
 
         var jsonError = function (response) {
@@ -90,21 +109,16 @@ define(["./module", 'config'], function (services, Config) {
             request.url += 'login';
             request.params = {code: code, redirect_uri: redirect_uri};
 
-            return $http(request).then(function (response) {
-
-                if (null === response.data) {
-                    return jsonError(response);
-                }
-
+            return executeHttp(request).then(function (data) {
                 session = {
-                    token: response.data.token,
-                    userType: response.data.user_type,
-                    expire: Math.floor((new Date).getTime() / 1E3) + response.data.timeout
+                    token: data.token,
+                    userType: data.user_type,
+                    expire: Math.floor((new Date).getTime() / 1E3) + data.timeout
                 };
 
                 localStorageService.set('session', session);
 
-            }, httpError);
+            });
         };
 
         /**
@@ -112,7 +126,7 @@ define(["./module", 'config'], function (services, Config) {
          */
         service.getAnswers = function() {
 
-            if(typeof session.answers !== "undefined") {
+            if(angular.isDefined(session.answers)) {
                 return $q.when(session.answers);
             }
 
@@ -120,16 +134,33 @@ define(["./module", 'config'], function (services, Config) {
 
             request.url += 'answers';
 
-            return $http(request).then(function (response) {
-
-                if (null === response.data) {
-                    return jsonError(response);
-                }
-
-                session.answers = response.data;
-
+            return executeHttp(request).then(function (data) {
+                session.answers = data;
                 return session.answers;
+            });
+        };
+
+        service.saveAnswer = function (data) {
+            if(service.saveAnswer.lastRequestStop) {
+                service.saveAnswer.lastRequestStop.resolve();
+            }
+
+            service.saveAnswer.lastRequestStop = $q.defer();
+
+            var request = getHttpRequest();
+
+            request.url += 'answers';
+            request.method = "POST";
+            request.data = data;
+
+            request.timeout = service.saveAnswer.lastRequestStop.promise;
+
+            return executeHttp(request).then(function (data) {
+                angular.extend(session.answers, data);
+
+                return data;
             }, httpError);
+
         };
 
         return service;

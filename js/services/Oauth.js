@@ -50,7 +50,7 @@ define(["./module", 'config'], function (services, Config, Api) {
 
                 return Api.login(code, $location.absUrl());
 
-            } else if( typeof params.error !== "undefined"  ) {
+            } else if( angular.isDefined(params.error)  ) {
                  var code =  params.error || 'Unknown';
                  var message = params.message || 'Невідома помилка';
 
