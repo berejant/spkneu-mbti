@@ -39,12 +39,18 @@ define([
             $rootScope.loading = false;
         });
 
-        $rootScope.hasMouse = false;
+        $rootScope.dblClickInfo = false;
 
-        angular.element(document.body).one('mousemove', function(){
-            $rootScope.hasMouse = true;
-            $rootScope.$apply();
-        })
+        if(!ionic.Platform.isIOS() && !ionic.Platform.isAndroid() && !ionic.Platform.isWindowsPhone() ) {
+            angular.element(document.body).one('mousemove', function(){
+                $rootScope.dblClickInfo = true;
+                $rootScope.$apply();
+            });
+        }
+
+        $rootScope.hideDblClickInfo = function() {
+            $rootScope.dblClickInfo = false;
+        };
     };
 
     /**

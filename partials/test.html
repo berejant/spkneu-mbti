@@ -16,7 +16,7 @@
                 <i class="icon ion-help"></i>
             </div>
 
-            <label class="item item-radio" ng-repeat="(answerId, answer) in question.answers" ng-dblclick="next();">
+            <label class="item item-radio" ng-repeat="(answerId, answer) in question.answers" ng-dblclick="next();hideDblClickInfo();">
                 <input type="radio" name="answer" ng-model="question.selectedAnswerId" ng-value="answerId">
                 <div class="item-content item-text-wrap" ng-bind="answer.text"></div>
                 <i class="radio-icon ion-checkmark"></i>
@@ -28,7 +28,7 @@
             Наступне питанння
         </button>
 
-        <div ng-if="hasMouse">
+        <div ng-if="dblClickInfo">
             <div class="card card-use-mouse">
                 <div class="item item-text-wrap">
                     <i class="icon ion-information-circled"></i>
