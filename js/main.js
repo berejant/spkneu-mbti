@@ -31,7 +31,7 @@ requirejs.config({
             exports: 'FastClick'
         }
     },
+
     // запустить приложение
     deps: ['./bootstrap']
 });
-

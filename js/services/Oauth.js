@@ -55,6 +55,8 @@ define(["./module", 'config'], function (services, Config, Api) {
                  var message = params.message || 'Невідома помилка';
 
                  return $q.reject('Помилка ' + code + ': ' + message);
+            } else if(Api.isLogged()) {
+                return $q.when();
             } else {
                 return $q.defer().promise;
             }

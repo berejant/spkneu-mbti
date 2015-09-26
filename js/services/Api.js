@@ -5,7 +5,7 @@ var angular;
 define(["./module", 'config'], function (services, Config) {
 
     /**
-     * Oauth
+     * Api
      *
      * @param {angular.$http} $http
      * @param {angular.$q} $q
@@ -14,9 +14,7 @@ define(["./module", 'config'], function (services, Config) {
      * @ngInject
      * @constructor
      */
-    var Api;
-
-    Api = function ($http, $q, localStorageService, $state) {
+    var Api = function ($http, $q, localStorageService, $state) {
 
         var httpError = function (response) {
             if(500 === response.status && response.data && response.data.error) {
@@ -26,7 +24,7 @@ define(["./module", 'config'], function (services, Config) {
             if(401 === response.status)
             {// сессия истекла
                 session.expire = 0;
-                service.isLogged();
+                Api.isLogged();
                 $state.go('home', {}, {location:'replace'});
 
                 return sessionError();
@@ -52,14 +50,14 @@ define(["./module", 'config'], function (services, Config) {
                 method: 'get',
                 url: 'api/',
                 responseType: 'json',
-                headers: service.isLogged() ? {
+                headers: Api.isLogged() ? {
                     Authorization: 'Bearer ' + session.token
                 } : null,
 
             };
         };
 
-        var service = {};
+        var Api = {};
 
         var session = localStorageService.get('session');
 
@@ -68,21 +66,16 @@ define(["./module", 'config'], function (services, Config) {
          *
          * @return {boolean}
          */
-        service.isLogged = function () {
+        Api.isLogged = function () {
             if(session && session.expire * 1E3 < (new Date).getTime()) {
                 localStorageService.remove('session');
                 session = null;
             }
 
             return !!(session && session.token);
-        }
+        };
 
-        service.isLogged();
-
-        if(session && session.expire * 1E3 < (new Date).getTime()) {
-            localStorageService.remove('session');
-            session = null;
-        }
+        Api.isLogged();
 
         /**
          *
@@ -90,7 +83,7 @@ define(["./module", 'config'], function (services, Config) {
          * @param {string} redirect_uri
          * @returns {angular.Promise}
          */
-        service.login = function (code, redirect_uri) {
+        Api.login = function (code, redirect_uri) {
 
             var request = getHttpRequest();
 
@@ -117,7 +110,7 @@ define(["./module", 'config'], function (services, Config) {
         /**
          * Получить ответы пользователя
          */
-        service.getAnswers = function() {
+        Api.getAnswers = function() {
 
             var request = getHttpRequest();
 
@@ -133,7 +126,7 @@ define(["./module", 'config'], function (services, Config) {
             }, httpError);
         };
 
-        return service;
+        return Api;
     };
 
     services.factory("Api", Api);

@@ -1,6 +1,13 @@
 define([
     'angular',
     'config',
+    'ionic/ionic',
+    'angular-animate',
+    'angular-sanitize',
+    'angular-ui-router',
+    'ionic/ionic-angular',
+    'angular-i18n/angular-locale_uk-ua',
+    'angular-local-storage',
     './controllers/index',
     './directives/index',
     './filters/index',

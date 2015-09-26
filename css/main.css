@@ -1,1 +1,6 @@
 @import url("../lib/ionic/release/css/ionic.css");
+
+
+.test-view .item-radio input:checked ~ .item-content {
+    background-color: #BAFFBC;
+}

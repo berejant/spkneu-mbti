@@ -1,3 +1,27 @@
 #!/bin/bash
 
-ls
+cd `dirname ${BASH_SOURCE[0]}` ;
+cd ..;
+
+r.js -o cssIn=css/main.css out=css/min.css optimizeCss=default logLevel=4
+
+r.js -o build.js out=stdout logLevel=4 \
+  | sed 's/^[ ]*\*[ ]*\@license//' \
+  | sed 's/MIT license//' \
+  | java -jar api/vendor/bin/compiler.jar \
+    --js_output_file js/min.js --warning_level QUIET --angular_pass --jscomp_off internetExplorerChecks
+
+APPCACHE=m.appcache
+
+echo 'CACHE MANIFEST' > $APPCACHE
+date +'# %Y-%m-%d %H:%M:%S' >> $APPCACHE
+
+echo 'lib/requirejs/require.js ' >> $APPCACHE
+echo 'js/min.js' >> $APPCACHE
+echo 'css/min.css' >> $APPCACHE
+
+echo '' >> $APPCACHE
+echo 'NETWORK:' >> $APPCACHE
+echo '*' >> $APPCACHE
+
+echo 'done'
