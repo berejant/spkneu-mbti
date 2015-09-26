@@ -7,7 +7,7 @@ return array(
         "migrations" => "migrations"
     ),
     "environments" => array(
-        "default_migration_table" => "phinxlog",
+        "default_migration_table" => "mbti_phinxlog",
         "default_database" => "prod",
         "prod" => array(
             "adapter" => $database['database_type'],

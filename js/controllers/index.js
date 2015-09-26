@@ -1,4 +1,5 @@
 define([
     './HomeController',
-    './LoginController'
+    './LoginController',
+    './TestController'
 ], function () {});

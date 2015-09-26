@@ -37,3 +37,5 @@ then
     cp config/oauth.sample.php config/oauth.php
 fi
 
+chmod a+w sessions
+

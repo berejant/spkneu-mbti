@@ -10,6 +10,7 @@ requirejs.config({
         'angular-sanitize': '../lib/angular-sanitize/angular-sanitize',
         'angular-ui-router': '../lib/angular-ui-router/release/angular-ui-router',
         'angular-i18n': '../lib/angular-i18n',
+        'angular-local-storage': '../lib/angular-local-storage/dist/angular-local-storage',
         'css': '../lib/require-css/css',
         'ionic': '../lib/ionic/release/js',
         'text': '../lib/text/text',

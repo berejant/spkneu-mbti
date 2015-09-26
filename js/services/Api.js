@@ -9,15 +9,13 @@ define(["./module", 'config'], function (services, Config) {
      *
      * @param {angular.$http} $http
      * @param {angular.$q} $q
+     * @param {angular.localStorageService} localStorageService
      * @ngInject
      * @constructor
      */
     var Api;
 
-    Api = function ($http, $q) {
-        var service = {};
-
-        var  accessToken = null;
+    Api = function ($http, $q, localStorageService) {
 
         var httpError = function (response) {
             if(500 === response.status && response.data && response.data.error) {
@@ -39,8 +37,37 @@ define(["./module", 'config'], function (services, Config) {
             return {
                 method: 'get',
                 url: 'api/',
-                responseType: 'json'
+                responseType: 'json',
+                headers: service.isLogged() ? {
+                    Authorization: 'Bearer ' + session.token
+                } : null,
+
             };
+        };
+
+        var service = {};
+
+        var session = localStorageService.get('session');
+
+        /**
+         * Проверить, авторизирован ли пользователь
+         *
+         * @return {boolean}
+         */
+        service.isLogged = function () {
+            if(session && session.expire * 1E3 < (new Date).getTime()) {
+                localStorageService.remove('session');
+                session = null;
+            }
+
+            return !!(session && session.token);
+        }
+
+        service.isLogged();
+
+        if(session && session.expire * 1E3 < (new Date).getTime()) {
+            localStorageService.remove('session');
+            session = null;
         }
 
         /**
@@ -53,7 +80,7 @@ define(["./module", 'config'], function (services, Config) {
 
             var request = getHttpRequest();
 
-            request.url += 'getAccessToken';
+            request.url += 'login';
             request.params = {code: code, redirect_uri: redirect_uri};
 
             return $http(request).then(function (response) {
@@ -62,18 +89,35 @@ define(["./module", 'config'], function (services, Config) {
                     return jsonError(response);
                 }
 
-                console.log(response.data);
+                session = {
+                    token: response.data.token,
+                    userType: response.data.user_type,
+                    expire: Math.floor((new Date).getTime() / 1E3) + response.data.timeout
+                };
+
+                localStorageService.set('session', session);
+
             }, httpError);
         };
 
         /**
-         * Проверить, авторизирован ли пользователь
-         *
-         * @return {boolean}
+         * Получить ответы пользователя
          */
-        service.isLogged = function () {
-            return false;
-        }
+        service.getAnswers = function() {
+
+            var request = getHttpRequest();
+
+            request.url += 'answers';
+
+            return $http(request).then(function (response) {
+
+                if (null === response.data) {
+                    return jsonError(response);
+                }
+
+                return response.data;
+            }, httpError);
+        };
 
         return service;
     };

@@ -4,3 +4,6 @@ lib
 api/composer.phar
 api/config/database.php
 api/config/oauth.php
+
+api/sessions/*
+api/sessions/!.gitkeep

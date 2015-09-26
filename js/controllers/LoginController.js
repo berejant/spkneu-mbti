@@ -13,7 +13,11 @@ define(['./module'], function (controllers) {
      */
     var controller = function ($scope, Oauth, $ionicPopup, $state) {
 
-        Oauth.finish().catch(function(error) {
+        Oauth.finish().then(function () {
+            // после успешной авторизации - отправить на главную
+            $state.go('home', {}, {location: 'replace'});
+        }, function(error) {
+            // в случае ошибки - вывести alert
             $ionicPopup.alert({
                 title: 'Помилка входу',
                 template: error

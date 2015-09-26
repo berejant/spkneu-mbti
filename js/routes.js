@@ -1,6 +1,11 @@
 'use strict';
 
-define(['./app'], function (app) {
+define([
+    './app',
+    'text!../partials/home.html',
+    'text!../partials/login.html',
+    'text!../partials/test.html'
+], function (app, homeTemplate, loginTemplate, testTemplate) {
 
     /**
      * Конфигурация роутинга
@@ -9,9 +14,7 @@ define(['./app'], function (app) {
      * @param {angular.$urlRouterProvider} $urlRouterProvider
      * @returns {undefined}
      */
-    var config;
-
-    config = function ($stateProvider, $urlRouterProvider) {
+    var config = function ($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.otherwise("/");
         //
@@ -19,14 +22,19 @@ define(['./app'], function (app) {
         $stateProvider
             .state('home', {
                 url: "/",
-                template: '<ion-view view-title="{{title}} - Головна">',
+                template: homeTemplate,
                 controller: 'HomeController'
 
             })
             .state('login', {
                 url: "/login",
-                templateUrl: "partials/login.html",
+                template: loginTemplate,
                 controller: 'LoginController'
+            })
+            .state('test', {
+                url: "/test",
+                template: testTemplate,
+                controller: 'TestController'
             })
     };
 

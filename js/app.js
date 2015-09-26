@@ -24,7 +24,7 @@ define([
 
             if (!Api.isLogged() && toState.name !== 'login') {
                 event.preventDefault();
-                $state.go('login', {}, {location: 'replace'});
+                $state.go('login', {}, {location: false});
             }
         });
 
@@ -35,11 +35,23 @@ define([
 
     };
 
+    /**
+     * @param {angular.localStorageServiceProvider} localStorageServiceProvider
+     * @ngInject
+     */
+    var storageConfig = function(localStorageServiceProvider) {
+        localStorageServiceProvider
+            .setPrefix('mbti')
+            .setStorageType('sessionStorage')
+            .setStorageCookie(0, '/');
+    }
+
     return ng.module('mbti', [
         'ionic',
+        'LocalStorageModule',
         'mbti.services',
         'mbti.controllers',
         'mbti.filters',
         'mbti.directives'
-    ]).run(run);
+    ]).config(storageConfig).run(run);
 });

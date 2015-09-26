@@ -15,6 +15,7 @@ define([
         'angular-ui-router',
         'ionic/ionic-angular',
         'angular-i18n/angular-locale_uk-ua',
+        'angular-local-storage',
     ], function (document) {
         /*
          * Запуск приложения, после загрузки всех зависимостей и domReady
