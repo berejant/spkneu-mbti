@@ -105,6 +105,18 @@ class Session
         return 'student';
     }
 
+    public function logout ()
+    {
+        session_id($this->key);
+        session_start();
+        session_destroy();
+        $this->key = null;
+        $this->userId = null;
+        $this->userType = null;
+
+        return true;
+    }
+
     /**
      * @return string
      */

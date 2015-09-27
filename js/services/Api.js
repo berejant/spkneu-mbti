@@ -133,6 +133,10 @@ define([
          * @returns {boolean}
          */
         service.logout = function () {
+            var request = getHttpRequest();
+            request.url += 'logout';
+            executeHttp(request);
+
             session.expire = 0;
 
             return !service.isLogged();

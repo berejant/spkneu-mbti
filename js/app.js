@@ -20,10 +20,11 @@ define([
      *
      * @param {angular.$rootScope} $rootScope - The Root Scope
      * @param {angular.$state} $state - Angular Location Service
-     * @param {angular.Api} $state - Api Service
+     * @param {angular.Api} Api - Api Service
+     * @param {angular.Oauth} Oauth - Api Service
      * @ngInject
      */
-    var run = function ($rootScope, $state, Api) {
+    var run = function ($rootScope, $state, Api, Oauth) {
         $rootScope.title = Config.title;
 
         $rootScope.$on('$stateChangeStart', function (event, toState) {
@@ -51,6 +52,14 @@ define([
         $rootScope.hideDblClickInfo = function() {
             $rootScope.dblClickInfo = false;
         };
+
+        $rootScope.logout = function() {
+            if(!Api.isLogged()) {
+                return;
+            }
+
+            Oauth.logout();
+        }
     };
 
     /**

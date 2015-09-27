@@ -14,10 +14,11 @@ define([
      * @param {angular.$state} $state
      * @param {angular.$location} $location
      * @param {angular.Api} Api
+     * @param {angular.$ionicPopup} $ionicPopup
      * @ngInject
      * @constructor
      */
-    var Oauth = function ($q, $state, $location, Api) {
+    var Oauth = function ($q, $state, $location, Api, $ionicPopup) {
          var service = {};
 
         service.start = function () {
@@ -65,7 +66,39 @@ define([
             }
         }
 
-         return service;
+        service.logout = function () {
+
+            var confirmPopup =  $ionicPopup.confirm({
+                title: 'Підтвердження',
+                template: 'Ви дійсно хочете вийти?',
+                okText: 'Так',
+                cancelText: 'Ні'
+            });
+
+            confirmPopup.then(function(confirmed) {
+                if(confirmed) {
+                    Api.logout();
+
+                    var url = Config.oauth.url + '/logout';
+
+                    if(url.indexOf('?') === -1) {
+                        url += '?';
+                    } else {
+                        url += '&';
+                    }
+
+                    url += 'client_id=' +  encodeURIComponent(Config.oauth.clientId);
+
+                    var redirect_uri = location.protocol + '//' + location.host + location.pathname + $state.href('home');
+
+                    url += '&redirect_uri=' + encodeURIComponent(redirect_uri);
+
+                    window.location.href = url;
+                }
+            });
+        }
+
+        return service;
     };
 
     services.factory("Oauth", Oauth);

@@ -76,6 +76,19 @@ $app->get('/login', function () use ($app, $db, $session) {
 
 });
 
+$app->get('/logout', function () use ($session) {
+
+    if(!checkAuth ()) {
+        return;
+    }
+
+    $status = $session->logout();
+
+    Helpers::sendJson(array(
+        'status' => $status
+    ));
+});
+
 
 $app->get('/answers', function() use ($session) {
 

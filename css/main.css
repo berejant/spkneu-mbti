@@ -107,3 +107,10 @@
     vertical-align: middle;
     text-align: center;
 }
+
+/**
+* Кнопка выход на нижней панели
+*/
+.bar-footer .button.button-clear.ion-log-out:before {
+    font-size: 25px;
+}
