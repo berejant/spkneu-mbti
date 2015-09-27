@@ -90,7 +90,7 @@ define([
          */
         service.isLogged = function () {
             if(session && session.expire * 1E3 < (new Date).getTime()) {
-                localStorageService.remove('session');
+                localStorageService.clearAll();
                 session = null;
             }
 
@@ -116,13 +116,27 @@ define([
                 session = {
                     token: data.token,
                     userType: data.user_type,
-                    expire: Math.floor((new Date).getTime() / 1E3) + data.timeout
+                    expire: Math.floor((new Date).getTime() / 1E3) + data.timeout,
                 };
 
                 localStorageService.set('session', session);
 
+                if(data.is_test_completed) {
+                    localStorageService.set('isTestCompleted', true);
+                }
+
             });
         };
+
+        /**
+         * Выйти из сессии
+         * @returns {boolean}
+         */
+        service.logout = function () {
+            session.expire = 0;
+
+            return !service.isLogged();
+        }
 
         /**
          * Получить ответы пользователя
@@ -166,13 +180,33 @@ define([
 
         };
 
-
         service.getResult = function () {
             var request = getHttpRequest();
             request.url += 'result';
 
-            return executeHttp(request);
+            return executeHttp(request).then(function(result) {
+                localStorageService.set('isTestCompleted', true);
+
+                return result;
+            });
         }
+
+        service.getIsTestCompleted = function () {
+            return !!localStorageService.get('isTestCompleted');
+        }
+
+        service.resetResult = function() {
+            var request = getHttpRequest();
+
+            request.method = "DELETE";
+            request.url += 'result';
+
+            return executeHttp(request).then(function(result) {
+                localStorageService.remove('isTestCompleted');
+                delete session.answers;
+            });
+        }
+
 
         return service;
     };

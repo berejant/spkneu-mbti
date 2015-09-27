@@ -95,6 +95,13 @@ define([
             });
         }
 
+        service.resetResult = function () {
+            return Api.resetResult().then(function() {
+                saveQueue = {};
+                lastSaveError = null;
+            });
+        };
+
         return service;
     };
 

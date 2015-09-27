@@ -33,6 +33,24 @@ class User
         return $this->studentId;
     }
 
+    protected $name;
+
+    public function getName() {
+        if(null === $this->name) {
+            global $db;
+
+            $name = $db->get(
+                $this->type === 'admin' ? 'mbti_admin' : 'mbti_student',
+                array('first_name', 'last_name'),
+                array('user_id' => $this->id)
+            );
+
+            $this->name = $name['first_name'] . ' ' . $name['last_name'];
+        }
+
+        return $this->name;
+    }
+
     /**
      * @return array
      */
@@ -128,7 +146,31 @@ class User
             'user_id' => $this->id
         ));
 
+        $result['name'] = $this->getName();
+
         return $result;
+    }
+
+    public function resetTestResult () {
+        global $db;
+
+        $db->update('mbti_student', array(
+            'person_formula' => null
+        ), array(
+            'user_id' => $this->id
+        ));
+
+        $db->delete('mbti_answers', array(
+            'student_id' => $this->getStudentId()
+        ));
+
+        return true;
+    }
+
+    public function getIsTestCompleted() {
+        global $db;
+
+        return (bool)$db->get('mbti_student', 'person_formula', array('user_id' => $this->id));
     }
 
 }

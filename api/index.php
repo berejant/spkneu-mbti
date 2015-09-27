@@ -70,7 +70,8 @@ $app->get('/login', function () use ($app, $db, $session) {
     Helpers::sendJson(array(
         'token'     => $session->getKey(),
         'user_type' => $session->getUserType(),
-        'timeout'   => $session->getTimeout()
+        'timeout'   => $session->getTimeout(),
+        'is_test_completed' => $session->getUser()->getIsTestCompleted()
     ));
 
 });
@@ -107,6 +108,18 @@ $app->get('/result', function() use ($session) {
     $response = $session->getUser()->getTestResult();
 
     Helpers::sendJson($response);
+});
+
+$app->delete('/result', function() use ($session) {
+    if(!checkAuth()) {
+        return;
+    }
+
+    $status = $session->getUser()->resetTestResult();
+
+    Helpers::sendJson(array(
+        'status' => $status
+    ));
 });
 
 $app->run();

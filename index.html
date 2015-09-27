@@ -9,15 +9,17 @@
         <title ng-bind="title"></title>
         <style>.ng-cloak{display:none}</style>
     </head>
-    <body>
-        <div ng-if="false" style="text-align:center;margin:100px 0 0;">
+    <body style="margin:0">
+        <div ng-if="false" style="text-align:center;margin:100px 0 0;line-height:18px">
             <img src="img/loading.gif" width="42" height="42"/>
-            <p style="font-size:14px;font-family:monospace;vertical-align:baseline;">Loading...</p>
+            <p style="font-size:14px;line-height:18px;font-family:monospace;vertical-align:baseline;margin:0">Loading...</p>
         </div>
 
         <ion-nav-bar class="bar-stable"><ion-nav-back-button></ion-nav-back-button></ion-nav-bar>
         <ion-nav-view></ion-nav-view>
-        <ion-footer-bar class="bar-stable ng-cloak"><a class="button button-clear title"><i class="icon ion-home"></i></a></ion-footer-bar>
+        <ion-footer-bar class="bar-stable ng-cloak">
+            <a ui-sref="home" class="button button-clear title"><i class="icon ion-home"></i></a>
+        </ion-footer-bar>
 
         <script src="lib/requirejs/require.js" data-main="js/main.js" async></script>
     </body>

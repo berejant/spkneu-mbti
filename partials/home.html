@@ -1,19 +1,31 @@
 <ion-view view-title="{{title}} - Головна" class="text-center" hide-back-button="{{hideBackButton}}">
-    <ion-content>
+    <ion-content class="middle">
 
-        <div class="row">
-            <div class="col">
-                <p>Інструмент MBTI — це індикатор, в ньому немає «правильних» або «неправильних» відповідей.</p>
+        <div ng-hide="isTestCompleted">
 
-                <p>Необхідно відповідати на всі питання чесно - так як є, а не так як ви хотіли, щоб було; чим більш
-                    чесними ви будете у ваших відповідях,тим точнішим буде результат.</p>
+            <div class="row">
+                <div class="col">
+                    <p>Інструмент MBTI — це індикатор, в ньому немає «правильних» або «неправильних» відповідей.</p>
 
-                <p>Не думайте довго над відповідями – давайте першу відповідь, яка прийде вам до голови</p>
+                    <p>Необхідно відповідати на всі питання чесно - так як є, а не так як ви хотіли, щоб було; чим більш
+                        чесними ви будете у ваших відповідях,тим точнішим буде результат.</p>
+
+                    <p>Не думайте довго над відповідями – давайте першу відповідь, яка прийде вам до голови</p>
+                </div>
             </div>
+
+            <a ui-sref="test" class="button button-balanced button-positive">
+                Розпочати тест
+            </a>
+
         </div>
 
-        <a ui-sref="test" class="button button-balanced button-positive">
-            Розпочати тест
-        </a>
+        <div ng-show="isTestCompleted">
+            <h4>Ви вже пройшли тестування</h4>
+
+            <p><a ui-sref="result" class="button button-balanced">Переглянути результат</a></p>
+            <p><a class="button" ng-click="resetResult()">Пройти заново</a></p>
+        </div>
+
     </ion-content>
 </ion-view>
