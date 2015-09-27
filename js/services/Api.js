@@ -29,7 +29,7 @@ define(["./module", 'config'], function (services, Config) {
 
                 return response.data;
             }, httpError);
-        }
+        };
 
         var httpError = function (response) {
             if(500 === response.status) {
@@ -46,7 +46,7 @@ define(["./module", 'config'], function (services, Config) {
             }
 
             return $q.reject('Помилка мережі' + ( response.status>0 ||response.statusText ? ': ' + response.status + ' ' + response.statusText : ''));
-        }
+        };
 
         var apiError = function (error) {
             if(error && "offline" === error.error_code) {
@@ -54,15 +54,15 @@ define(["./module", 'config'], function (services, Config) {
             }
 
             return $q.reject('Помилка серверу' + (error ? ' #' + error.error_code + ': ' + error.error_msg : ''));
-        }
+        };
 
         var jsonError = function (response) {
             return $q.reject('Некорректна відповідь сервера');
-        }
+        };
 
         var sessionError = function (error) {
             return $q.reject('Авторизуйтесь повторно');
-        }
+        };
 
         var getHttpRequest = function () {
             return {
@@ -162,6 +162,14 @@ define(["./module", 'config'], function (services, Config) {
             });
 
         };
+
+
+        service.getResult = function () {
+            var request = getHttpRequest();
+            request.url += 'result';
+
+            return executeHttp(request);
+        }
 
         return service;
     };

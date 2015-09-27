@@ -25,11 +25,9 @@ define([
             return Api.getAnswers().then(function (answers) {
                 return angular.isDefined(answers[questionId]) ? answers[questionId] : null;
             });
-        }
+        };
 
         service.getQuestion = function (questionId) {
-            questionId = parseInt(questionId);
-
             if(typeof questions[questionId] === "undefined") {
                 return $q.when(null);
             }
@@ -37,14 +35,11 @@ define([
             var question = questions[questionId];
             question.id = questionId;
 
-            var nextId = 1 + questionId;
-            question.nextId = angular.isDefined(questions[nextId]) ? nextId : null;
-
             return getAnswer(questionId).then(function(answer){
                 question.selectedAnswerId = answer;
                 return question;
             });
-        }
+        };
 
 
         var lastSaveError = null;
@@ -73,10 +68,27 @@ define([
             lastSaveError = null;
 
             return promise;
-        }
+        };
 
         service.getLastServiceError = function () {
             return lastSaveError;
+        };
+
+        service.getFirstUnansweredQuestionId = function (ignoreQuestionId) {
+            return Api.getAnswers().then(function (answers) {
+                for (var questionId in questions) {
+                    if (questionId !== ignoreQuestionId && questions.hasOwnProperty(questionId) && angular.isUndefined(answers[questionId])) {
+                        return questionId;
+                    }
+                }
+
+                return null;
+            });
+        };
+
+
+        service.getResult = function () {
+            return Api.getResult();
         }
 
         return service;

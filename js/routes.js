@@ -4,8 +4,9 @@ define([
     './app',
     'text!../partials/home.html',
     'text!../partials/login.html',
-    'text!../partials/test.html'
-], function (app, homeTemplate, loginTemplate, testTemplate) {
+    'text!../partials/test.html',
+    'text!../partials/result.html'
+], function (app, homeTemplate, loginTemplate, testTemplate, resultTemplate) {
 
     /**
      * Конфигурация роутинга
@@ -24,7 +25,6 @@ define([
                 url: "/",
                 template: homeTemplate,
                 controller: 'HomeController'
-
             })
             .state('login', {
                 url: "/login",
@@ -34,10 +34,12 @@ define([
             .state('test', {
                 url: "/test/:questionId",
                 template: testTemplate,
-                controller: 'TestController',
-                params: {
-                    questionId: 1
-                }
+                controller: 'TestController'
+            })
+            .state('result', {
+                url: "/result",
+                template: resultTemplate,
+                controller: 'ResultController'
             })
     };
 
