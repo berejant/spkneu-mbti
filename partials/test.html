@@ -1,4 +1,4 @@
-<ion-view view-title="Питання #{{question.id}}/{{questionsCount}}" class="test-view text-center" hide-back-button="{{hideBackButton}}">
+<ion-view view-title="Питання #{{question.id}}/{{questionsCount}}" class="text-center" hide-back-button="{{hideBackButton}}">
 
     <ion-nav-buttons side="secondary">
         <button ng-click="next()" ng-show="question.selectedAnswerId" class="button button-clear header-item next-button">
@@ -9,14 +9,23 @@
 
     <ion-content scroll="false">
 
-        <div class="card">
+        <div class="card card-save-error" ng-show="lastSaveError">
+            <div class="item assertive item-text-wrap item-icon-left item-icon-right">
+                <i class="icon ion-alert-circled"></i>
+                <div>Відповідь не збережена:</div>
+                <div ng-bind="lastSaveError"></div>
+                <i class="icon ion-alert-circled"></i>
+            </div>
+        </div>
+
+        <div class="card card-question">
 
             <div class="item item-divider item-icon-right">
                 <div class="item-content item-text-wrap" ng-bind="question.text"></div>
                 <i class="icon ion-help"></i>
             </div>
 
-            <label class="item item-radio" ng-repeat="(answerId, answer) in question.answers" ng-dblclick="next();hideDblClickInfo();">
+            <label class="item item-radio" ng-repeat="(answerId, answer) in question.answers" ng-dblclick="next();hideDblClickInfo();" ng-class="{checked:question.selectedAnswerId==answerId}">
                 <input type="radio" name="answer" ng-model="question.selectedAnswerId" ng-value="answerId">
                 <div class="item-content item-text-wrap" ng-bind="answer.text"></div>
                 <i class="radio-icon ion-checkmark"></i>

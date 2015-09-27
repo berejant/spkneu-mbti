@@ -6,7 +6,7 @@
     padding-right: 28px;
 }
 
-.test-view .item-radio input:checked ~ .item-content {
+.card-question .item-radio.checked .item-content  {
     background-color: #BAFFBC;
 }
 

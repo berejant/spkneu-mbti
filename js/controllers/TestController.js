@@ -16,7 +16,6 @@ define([
      * @ngInject
      */
     var TestController = function ($scope, Testing, $state, $ionicPopup, $ionicLoading) {
-        var questionId =  $state.params.questionId;
         $scope.question = {
             id: $state.params.questionId
         };
@@ -41,17 +40,23 @@ define([
         $scope.next = function () {
             if($scope.question.selectedAnswerId) {
 
-                Testing.saveAnswer($scope.question);
-
+                var savePromise = Testing.saveAnswer($scope.question);
+console.log($state.current);
                 if (null !== $scope.question.nextId) {
-                    $state.go('test', {questionId: $scope.question.nextId});
+                    $state.go($state.current.name, {questionId: $scope.question.nextId});
                 } else {
-                    console.log('test done');
+                    savePromise.then(function() {
+                       $state.go('test.result');
+                    });
                 }
             }
         }
 
         $scope.questionsCount = Testing.questionsCount;
+
+        $scope.$watch(Testing.getLastServiceError, function(lastSaveError) {
+            $scope.lastSaveError = lastSaveError;
+        });
 
     };
 

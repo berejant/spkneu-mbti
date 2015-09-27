@@ -45,7 +45,7 @@ define(["./module", 'config'], function (services, Config) {
                 return sessionError();
             }
 
-            return $q.reject('Помилка мережі: ' + response.status + ' ' + response.statusText);
+            return $q.reject('Помилка мережі' + ( response.status>0 ||response.statusText ? ': ' + response.status + ' ' + response.statusText : ''));
         }
 
         var apiError = function (error) {
@@ -159,7 +159,7 @@ define(["./module", 'config'], function (services, Config) {
                 angular.extend(session.answers, data);
 
                 return data;
-            }, httpError);
+            });
 
         };
 

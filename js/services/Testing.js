@@ -53,7 +53,7 @@ define([
         service.saveAnswer = function(question) {
             saveQueue[question.id] = question.selectedAnswerId;
 
-            Api.saveAnswer(saveQueue).then(function(responseData) {
+            var promise = Api.saveAnswer(saveQueue).then(function(responseData) {
                 lastSaveError = null;
 
                 // умная система отправки данных, для того чтобы в случае ошибок - данные сохранились при следующем вызове
@@ -66,9 +66,13 @@ define([
                 if(Object.keys(saveQueue).length) {
                     lastSaveError = error;
                 }
+
+                return error;
             });
 
             lastSaveError = null;
+
+            return promise;
         }
 
         service.getLastServiceError = function () {
