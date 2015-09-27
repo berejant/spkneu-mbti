@@ -1,0 +1,16 @@
+CACHE MANIFEST
+# 2015-09-28 02:40:07
+./
+lib/requirejs/require.js
+js/min.js
+css/min.css
+lib/ionic/release/fonts/ionicons.ttf?v=2.0.1
+img/loading.gif
+
+NETWORK:
+*
+
+FALLBACK:
+./api fallback/offline.json
+./api/answers fallback/answers.json
+
