@@ -1,6 +1,63 @@
 <ion-view view-title="Результати" class="text-center">
 
-    <ion-content scroll="false">
-        {{result|json}}
+    <ion-content>
+        <div ng-if="result" сlass="list">
+
+            <div class="item item-divider">
+                Ваш тип:
+            </div>
+            <div class="item item-text-wrap" ng-bind="result.personType.alias"></div>
+
+            <div class="item item-divider">
+                Описание личности:
+            </div>
+            <div class="item item-text-wrap" ng-bind="result.personType.description"></div>
+
+            <div class="item item-divider">
+                Формула:
+            </div>
+            <div class="item item-text-wrap" ng-bind="result.formula"></div>
+
+            <div class="item item-divider">
+                Подсчеты:
+            </div>
+            <div class="item item-text-wrap result-table">
+
+                <div class="row">
+                    <div class="col col-25 section-label"><span>Шкала</span></div>
+
+                    <div class="col" ng-repeat="(groupKey, groupItemsSection) in result.groups">
+                        <span ng-bind="groupKey"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col col-25 top-none"></div>
+
+                    <div class="col" ng-repeat="sectionKey in sections">
+                        <span ng-bind="sectionKey"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col col-25">Очки</div>
+
+                    <div class="col score" ng-repeat="sectionKey in sections" ng-class="{dominant:result.formula.indexOf(sectionKey)!=-1}">
+                        <span ng-bind="result.totals[sectionKey]"></span>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col col-25 domination-labael"><span>Домини</span><span>рует</span></div>
+
+                    <div class="col domination-value" ng-repeat="(groupKey, groupItemsSection) in result.groups">
+                        <span ng-bind="result.dominants[groupKey]" class="col-center"></span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
     </ion-content>
 </ion-view>

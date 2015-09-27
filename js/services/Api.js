@@ -2,7 +2,10 @@
 
 var angular;
 
-define(["./module", 'config'], function (services, Config) {
+define([
+    "./module",
+    'Config'
+], function (services, Config) {
 
     /**
      * Взаимодействие с серверов

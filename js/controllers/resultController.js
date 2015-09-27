@@ -21,8 +21,15 @@ define([
             template: loadingTemplate
         });
 
+        $scope.sections = [];
+
         Testing.getResult().then(function(result) {
             $scope.result = result;
+
+            angular.forEach(result.groups, function(sections) {
+                $scope.sections = $scope.sections.concat(sections);
+            });
+
         }, function(error) {
             // в случае ошибки - вывести alert
             $ionicPopup.alert({

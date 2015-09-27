@@ -4,8 +4,9 @@ var angular;
 
 define([
     "./module",
-    "json!../../questions.json",
-], function (services, questions) {
+    "json!../../config/questions.json",
+    "json!../../config/personTypes.json",
+], function (services, questions, personTypes) {
 
     /**
      * Сервис для проведения тестирования пользователя
@@ -86,9 +87,12 @@ define([
             });
         };
 
-
         service.getResult = function () {
-            return Api.getResult();
+            return Api.getResult().then(function(result){
+                result.personType = personTypes[result.formula];
+
+                return result;
+            });
         }
 
         return service;

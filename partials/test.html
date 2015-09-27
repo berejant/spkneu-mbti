@@ -7,7 +7,7 @@
         </button>
     </ion-nav-buttons>
 
-    <ion-content scroll="false">
+    <ion-content>
 
         <div class="card card-save-error" ng-show="lastSaveError">
             <div class="item assertive item-text-wrap item-icon-left item-icon-right">
@@ -19,7 +19,6 @@
         </div>
 
         <div class="card card-question" ng-show="question.text">
-
             <div class="item item-divider item-icon-right">
                 <div class="item-content item-text-wrap" ng-bind="question.text"></div>
                 <i class="icon ion-help"></i>
@@ -30,7 +29,6 @@
                 <div class="item-content item-text-wrap" ng-bind="answer.text"></div>
                 <i class="radio-icon ion-checkmark"></i>
             </label>
-
         </div>
 
         <button class="button icon icon-right ion-ios-arrow-forward" ng-click="next()" ng-disabled="!question.selectedAnswerId">

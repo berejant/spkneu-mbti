@@ -2,7 +2,10 @@
 
 var angular;
 
-define(["./module", 'config'], function (services, Config, Api) {
+define([
+    "./module",
+    'Config'
+], function (services, Config, Api) {
 
     /**
      * Oauth

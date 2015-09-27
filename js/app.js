@@ -1,6 +1,6 @@
 define([
     'angular',
-    'config',
+    'Config',
     'ionic/ionic',
     'angular-animate',
     'angular-sanitize',

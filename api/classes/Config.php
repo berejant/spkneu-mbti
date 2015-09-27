@@ -17,31 +17,19 @@ class Config
     public static function oauth() {
         $config = self::loadFile(__FUNCTION__);
 
-        $appConfigJsonFile = __DIR__ . '/../../config.json';
-
-        if(!file_exists($appConfigJsonFile)) {
-            throw new ConfigException('App config.json not found');
-        }
-
-        $appConfigJson = file_get_contents($appConfigJsonFile);
-
-        if(!$appConfigJson) {
-            throw new ConfigException('Failed to load app config.json');
-        }
-
-        $appConfig = json_decode($appConfigJson);
-
-        if(!$appConfig) {
-            throw new ConfigException('Failed to parse app config.json');
-        }
+        $appConfig = self::loadFrontEndFile('app');
 
         if(!isset($appConfig->oauth, $appConfig->oauth->clientId)) {
-            throw new ConfigException('In app config.json not found clientId');
+            throw new ConfigException('In app app.json not found clientId');
         }
 
         $config['id'] = $appConfig->oauth->clientId;
 
         return $config;
+    }
+
+    public static function questions() {
+        return self::loadFrontEndFile('questions');
     }
 
     /**
@@ -61,6 +49,33 @@ class Config
 
         if(!$config) {
             throw new ConfigException('Bad config file ' . $fileName);
+        }
+
+        return $config;
+    }
+
+    /**
+     * @param string $fileName
+     * @return array
+     * @throws ConfigException
+     */
+    protected static function loadFrontEndFile($fileName) {
+        $filePath = __DIR__ . '/../../config/' . $fileName . '.json';
+
+        if(!file_exists($filePath)) {
+            throw new ConfigException('No file' . $fileName);
+        }
+
+        $content = file_get_contents($filePath);
+
+        if(!$content) {
+            throw new ConfigException('Empty file ' . $fileName);
+        }
+
+        $config = json_decode($content);
+
+        if(null === $config) {
+            throw new ConfigException('Bad json in questions.json');
         }
 
         return $config;

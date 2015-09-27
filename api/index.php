@@ -76,7 +76,7 @@ $app->get('/login', function () use ($app, $db, $session) {
 });
 
 
-$app->get('/answers', function() use($session) {
+$app->get('/answers', function() use ($session) {
 
     if(!checkAuth ()) {
         return;
@@ -86,16 +86,27 @@ $app->get('/answers', function() use($session) {
 });
 
 
-$app->post('/answers', function() use($session) {
+$app->post('/answers', function() use ($session) {
     if(!checkAuth ()) {
         return;
     }
 
     $answers = Helpers::getRequestJson();
 
-    $result = $session->getUser()->saveAnswers($answers);
+    $response = $session->getUser()->saveAnswers($answers);
 
-    Helpers::sendJson($result);
+    Helpers::sendJson($response);
+});
+
+
+$app->get('/result', function() use ($session) {
+    if(!checkAuth ()) {
+        return;
+    }
+
+    $response = $session->getUser()->getTestResult();
+
+    Helpers::sendJson($response);
 });
 
 $app->run();

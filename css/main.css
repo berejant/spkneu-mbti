@@ -26,3 +26,45 @@
 .card-use-mouse .item {
     background-color: #DEF7F7;
 }
+
+.result-table .header .col {
+    background-color:lightgrey;
+}
+
+.result-table .col {
+    border: solid 1px grey;
+    border-bottom-style: none;
+    border-right-style: none;
+}
+
+.result-table .col:last-child {
+    border-right: solid 1px grey;
+}
+
+.result-table .row:last-child .col {
+    border-bottom: solid 1px grey;
+}
+
+.result-table .col.top-none {
+    border-top: none;
+}
+
+.result-table .domination-labael span {
+    display: inline-block;
+}
+
+.result-table .domination-value {
+    line-height: 40px;
+    vertical-align: middle;
+}
+
+.result-table .section-label {
+    position: relative;
+}
+
+.result-table .section-label span {
+    width: 100%;
+    position: absolute;
+    top: 20px;
+    left: 0;
+}

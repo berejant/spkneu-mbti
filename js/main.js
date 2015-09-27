@@ -19,7 +19,7 @@ requirejs.config({
     map: {
         '*': {
             'css': '../lib/require-css/css', // or whatever the path to require-css is
-            'config': 'json!../config.json'
+            'Config': 'json!../config/app.json'
         }
     },
     // angular не поддерживает AMD из коробки, поэтому экспортируем перменную angular в глобальную область

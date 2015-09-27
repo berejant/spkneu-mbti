@@ -10,6 +10,8 @@ class User
 
     protected $adminId;
 
+    protected $sex;
+
     public function __construct($id, $type) {
         $this->id = $id;
         $this->type = $type;
@@ -52,6 +54,8 @@ class User
 
             return $return;
         }
+
+        return array();
     }
 
 
@@ -100,6 +104,29 @@ class User
                 $result[$questionId] = $answerId;
             }
         }
+
+        return $result;
+    }
+
+    public function getSex() {
+        if(null === $this->sex) {
+            global $db;
+            $this->sex = $db->get('mbti_student', 'sex', array('user_id' => $this->id));
+        }
+
+        return $this->sex;
+    }
+
+    public function getTestResult () {
+        global $db;
+
+        $result = TestResult::getInstance()->calculateResult($this->getAnswers(), $this->getSex());
+
+        $db->update('mbti_student', array(
+            'person_formula' => $result['formula']
+        ), array(
+            'user_id' => $this->id
+        ));
 
         return $result;
     }
