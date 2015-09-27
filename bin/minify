@@ -19,13 +19,17 @@ echo './
 lib/requirejs/require.js
 js/min.js
 css/min.css
-lib/ionic/release/fonts/ionicons.ttf?v=2.0.1
+lib/ionic/release/fonts/ionicons.ttf?v=2.0.1' >> $APPCACHE
 
+find img | grep -e \\.gif$ -e \\.jpg$ | sed 's/^\.\///' | sort  >> $APPCACHE
+
+echo '
 NETWORK:
 *
 
 FALLBACK:
 ./api fallback/offline.json
-./api/answers fallback/answers.json' >> $APPCACHE
+./api/answers fallback/answers.json
+' >> $APPCACHE
 
 echo 'done'
