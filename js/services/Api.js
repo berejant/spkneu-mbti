@@ -39,21 +39,20 @@ define([
                 return apiError(response.data && response.data.error ? response.data.error : null);
             }
 
-            if(401 === response.status)
-            {// сессия истекла
-                session.expire = 0;
-                service.isLogged();
-                $state.go('home', {}, {location:'replace'});
-
-                return sessionError();
-            }
-
             return $q.reject('Помилка мережі' + ( response.status>0 ||response.statusText ? ': ' + response.status + ' ' + response.statusText : ''));
         };
 
         var apiError = function (error) {
             if(error && "offline" === error.error_code) {
                 return $q.reject(error.error_msg);
+            }
+
+            if(error && "unauthorized" === error.error_code) {
+                session.expire = 0;
+                service.isLogged();
+                $state.go('home', {}, {location:'replace'});
+
+                return sessionError();
             }
 
             error.type = "API";

@@ -23,10 +23,9 @@ function checkAuth () {
     global $session, $app;
 
     if(!$session->getUserId())  {
-        $app->response->setStatus(401);
         Helpers::sendJson(array(
             'error' => array(
-                'error_code' => 'Unauthorized',
+                'error_code' => 'unauthorized',
                 'error_msg' => 'Для виконання цієї діх необхідно авторизуватися'
             )
         ));
@@ -38,6 +37,9 @@ function checkAuth () {
 }
 
 $app->error(function (\Exception $e) use ($app) {
+
+    $app->response->setStatus(200);
+
     Helpers::sendJson(array(
         'error' => array(
             'error_code' => $e->getCode(),
@@ -47,6 +49,9 @@ $app->error(function (\Exception $e) use ($app) {
 });
 
 $app->notFound(function() use($app) {
+
+    $app->response->setStatus(200);
+
     Helpers::sendJson(array(
         'error' => array(
             'error_code' => 404,
