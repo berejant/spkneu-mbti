@@ -64,15 +64,15 @@
     border-top: none;
 }
 
-.result-table .domination-label span {
+.result-table .col.label span {
     display: inline-block;
 }
 
-.result-table .domination-value {
+.result-table .col.value {
     position: relative;
 }
 
-.result-table .domination-value span {
+.result-table .col.value span {
     position: absolute;
     height: 18px;
     width: 100%;
@@ -80,7 +80,6 @@
     top:50%;
     margin-top: -9px;
 }
-
 
 .result-table .section-label {
     position: relative;

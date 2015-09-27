@@ -6,7 +6,7 @@ class TestResultException extends \Exception
 
     protected $questionId;
 
-    public function __construct($message, $code, $additionalData)
+    public function __construct($message, $code = null, $additionalData = null)
     {
         parent::__construct($message, $code);
 

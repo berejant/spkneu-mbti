@@ -52,10 +52,54 @@
 
 
                 <div class="row">
-                    <div class="col col-25 domination-label"><span>Домі</span><span>нує</span></div>
+                    <div class="col col-25">Max</div>
 
-                    <div class="col domination-value" ng-repeat="(groupKey, groupItemsSection) in result.groups">
+                    <div class="col" ng-repeat="sectionKey in sections">
+                        <span ng-bind="result.maxTotals[sectionKey]"></span>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col col-25 label">% от Max</div>
+
+                    <div class="col value" ng-repeat="sectionKey in sections">
+                        <span ng-bind="result.fraction[sectionKey]"></span>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col col-25 label"><span>Коефі</span><span>цієнт</span></div>
+
+                    <div class="col value" ng-repeat="(groupKey, groupItemsSection) in result.groups">
+                        <span ng-bind="result.coefficients[groupKey]" class="col-center"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col col-25 label"><span>% вира</span><span>женості</span></div>
+
+                    <div class="col value" ng-repeat="sectionKey in sections">
+                        <span ng-bind="result.expressions[sectionKey]"></span>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col col-25 label"><span>Домі</span><span>нує</span></div>
+
+                    <div class="col value" ng-repeat="(groupKey, groupItemsSection) in result.groups">
                         <span ng-bind="result.dominants[groupKey]" class="col-center"></span>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col col-25 label"><span>Вира</span><span>женість</span></div>
+
+                    <div class="col value" ng-repeat="(groupKey, groupItemsSection) in result.groups">
+                        <span ng-show="result.isExpressed[groupKey]" class="col-center balanced">Так</span>
                     </div>
                 </div>
 

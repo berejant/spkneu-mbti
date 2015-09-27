@@ -58,6 +58,7 @@ class TestResult
     {
         $sex = $sex === 'female' ? 'female' : 'male';
 
+        // генерируем массива с итоговым балами по шкалам
         $sectionTotals = array();
 
         foreach($this->sectionGroups as $sectionGroup) {
@@ -66,6 +67,7 @@ class TestResult
 
         $sectionMaxTotals = $sectionTotals;
 
+        // заполняем итоговые балы по шкалам + максимальное значение
         foreach($this->questions as $questionId => $question)
         {
             if(!isset($selectedAnswerIds[$questionId])) {
@@ -87,7 +89,7 @@ class TestResult
                 $sectionTotals[$sectionKey] += $this->getScoreValue($selectedAnswer->score, $sex);
             }
 
-            // расчитываем аксимаьные балы по разным шкалам (секциями)
+            // расчитываем максимальные балы по разным шкалам (секциями)
             foreach($question->answers as $answer) {
                 if(isset($answer->section)) {
                     $sectionKey = $answer->section;
@@ -96,17 +98,53 @@ class TestResult
             }
         }
 
-        $sectionGroupDominants = array();
+        // расчитываем по каждой шкале долю балов в зависимости от максимума
+        $sectionFractions = array();
+        foreach($sectionMaxTotals as $sectionKey => $sectionMaxTotal)
+        {
+            $sectionFractions[$sectionKey] =  $sectionTotals[$sectionKey] / $sectionMaxTotal;
+        }
+
+        // расчитываем коефициент по каждой группе шкал
+        $sectionGroupCoefficients = array();
+        // расчитываем процент выраженности каждой шкалы в своей группе
+        $sectionExpressions = array();
         foreach($this->sectionGroups as $sectionGroupKey => $sectionGroupItems) {
-            $_maxTotal = null;
+            $sectionGroupCoefficients[$sectionGroupKey] = 0;
+            foreach($sectionGroupItems as $sectionKey)
+            {
+                // расчитываем коефициент по каждой группе шкал
+                $sectionGroupCoefficients[$sectionGroupKey] += $sectionFractions[$sectionKey];
+            }
 
             foreach($sectionGroupItems as $sectionKey)
             {
-                if($sectionTotals[$sectionKey] > $_maxTotal) {
-                    $_maxTotal = $sectionTotals[$sectionKey];
+                // расчитываем процент выраженности каждой шкалы в своей группе
+                $sectionExpressions[$sectionKey] = $sectionFractions[$sectionKey] / $sectionGroupCoefficients[$sectionGroupKey];
+            }
+        }
+
+        $sectionGroupDominants = array();
+        $sectionGroupIsExpressed = array();
+
+        // расчитываем доминурующую секцию (предпочтение)
+        foreach($this->sectionGroups as $sectionGroupKey => $sectionGroupItems) {
+            $_maxExpression = null;
+            $_minExpression = 1E9;
+
+            foreach($sectionGroupItems as $sectionKey)
+            {
+                $sectionExpression = $sectionExpressions[$sectionKey];
+
+                if($sectionExpression > $_maxExpression) {
+                    $_maxExpression = $sectionExpression;
                     $sectionGroupDominants[$sectionGroupKey] = $sectionKey;
                 }
+
+                $_minExpression = min($_minExpression, $sectionExpression);
             }
+
+            $sectionGroupIsExpressed[$sectionGroupKey] = $_maxExpression / $_minExpression > 2;
         }
 
         $formula = implode('', $sectionGroupDominants);
@@ -115,7 +153,11 @@ class TestResult
             'groups' => $this->sectionGroups,
             'totals' => $sectionTotals,
             'maxTotals' => $sectionMaxTotals,
+            'fraction' => $this->roundArray($sectionFractions, 2, 100),
+            'coefficients' => $this->roundArray($sectionGroupCoefficients),
+            'expressions' => $this->roundArray($sectionExpressions, 2, 100),
             'dominants' => $sectionGroupDominants,
+            'isExpressed' => $sectionGroupIsExpressed,
             'formula'   => $formula
         );
     }
@@ -131,6 +173,15 @@ class TestResult
         }
 
         return $score;
+    }
+
+    protected function roundArray($array, $precision = 3, $multiplier = 1) {
+        foreach($array as &$value) {
+            $value = round($value, $precision) * $multiplier;
+        }
+        unset($value);
+
+        return $array;
     }
 
 }
