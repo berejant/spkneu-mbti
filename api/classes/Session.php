@@ -81,7 +81,7 @@ class Session
         $user = $api->getUser();
 
         if($user->type !== 'student') {
-            throw new Exception('Доступ дозволено лише студентам');
+            throw new Exception('Доступ дозволено лише студентам', 403);
         }
 
         if(!$db->has('mbti_group', array('id'=> $user->group_id))) {

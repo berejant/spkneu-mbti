@@ -6,7 +6,7 @@ require 'vendor/autoload.php';
  * @var \Slim\Slim
  */
 $app = new \Slim\Slim(array(
-    'debug' => true
+    'debug' => false
 ));
 
 /**

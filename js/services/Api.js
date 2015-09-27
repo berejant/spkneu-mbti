@@ -56,7 +56,13 @@ define([
                 return $q.reject(error.error_msg);
             }
 
-            return $q.reject('Помилка серверу' + (error ? ' #' + error.error_code + ': ' + error.error_msg : ''));
+            error.type = "API";
+
+            error.toString = function() {
+                return 'Помилка серверу' + (error ? ' #' + error.error_code + ': ' + error.error_msg : '');
+            }
+
+            return $q.reject(error);
         };
 
         var jsonError = function (response) {
@@ -133,13 +139,18 @@ define([
          * @returns {boolean}
          */
         service.logout = function () {
-            var request = getHttpRequest();
-            request.url += 'logout';
-            executeHttp(request);
 
-            session.expire = 0;
+            if(session) {
+                var request = getHttpRequest();
+                request.url += 'logout';
+                executeHttp(request);
 
-            return !service.isLogged();
+                session.expire = 0;
+
+                return !service.isLogged();
+            }
+
+            return true;
         }
 
         /**

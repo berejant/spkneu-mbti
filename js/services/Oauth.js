@@ -66,14 +66,19 @@ define([
             }
         }
 
-        service.logout = function () {
+        service.logout = function (force) {
 
-            var confirmPopup =  $ionicPopup.confirm({
-                title: 'Підтвердження',
-                template: 'Ви дійсно хочете вийти?',
-                okText: 'Так',
-                cancelText: 'Ні'
-            });
+            var confirmPopup;
+            if(!force) {
+                confirmPopup = $ionicPopup.confirm({
+                    title: 'Підтвердження',
+                    template: 'Ви дійсно хочете вийти?',
+                    okText: 'Так',
+                    cancelText: 'Ні'
+                });
+            } else {
+                confirmPopup = $q.when(force);
+            }
 
             confirmPopup.then(function(confirmed) {
                 if(confirmed) {

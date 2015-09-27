@@ -18,10 +18,16 @@ define(['./module'], function (controllers) {
             $state.go('home', {}, {location: 'replace'});
         }, function(error) {
             // в случае ошибки - вывести alert
-            $ionicPopup.alert({
+            var alertPromise = $ionicPopup.alert({
                 title: 'Помилка входу',
                 template: error
             });
+
+            if("API" === error.type && 403 === error.error_code) {
+                alertPromise.then(function() {
+                    Oauth.logout(true);
+                });
+            }
         });
 
         $scope.oauthStart = function () {
