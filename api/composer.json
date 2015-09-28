@@ -11,7 +11,8 @@
     "require": {
         "slim/slim": "2.x-dev",
         "catfan/medoo": "dev-master",
-        "robmorgan/phinx": "dev-master",
+        "symfony/filesystem": "2.6.11",
+        "robmorgan/phinx": "0.4.3",
         "packagist/closurecompiler-bin": "dev-master",
         "kneu/api": "dev-master",
         "ext-json": "*"
