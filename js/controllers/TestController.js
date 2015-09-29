@@ -34,6 +34,9 @@ define([
 
                     return $q.when(waitingMoveToResultPagePromise).then(function(){
                         return $state.go('result', {}, {location:locationMode});
+                    }, function(error) {
+                        $ionicLoading.hide();
+                        return $q.reject(error);
                     });
                 }
             });
