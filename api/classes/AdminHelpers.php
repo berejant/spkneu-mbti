@@ -17,12 +17,23 @@ class AdminHelpers
         return $return;
     }
 
-    public static function getResults () {
+    public static function getResults (array $filters = array()) {
         global $db;
+
+        $where = array(
+            'ORDER' => array(
+                'person_formula DESC',
+                'last_name ASC',
+            )
+        );
+
+        if(isset($filters['groupId']) && is_numeric($filters['groupId'])) {
+            $where['AND']['group_id'] = (int)$filters['groupId'];
+        }
 
         $results = $db->select('mbti_student', array(
             'id', 'group_id', 'first_name', 'middle_name', 'last_name', 'person_formula'
-        ), 'ORDER BY person_formula IS NULL');
+        ), $where);
 
         foreach($results as &$item) {
             $item['id'] = (int)$item['id'];

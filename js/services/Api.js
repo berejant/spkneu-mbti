@@ -248,13 +248,14 @@ define([
             return executeHttp(request);
         };
 
-        service.getAdminResults = function () {
+        service.getAdminResults = function (filters) {
             if(service.getUserType() !== 'admin') {
                 return $q.reject('Доступ мають лише адмінстартори');
             }
 
             var request = getHttpRequest();
             request.url += 'admin/results';
+            request.params = filters;
 
             return executeHttp(request);
 

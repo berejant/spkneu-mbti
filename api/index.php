@@ -16,6 +16,8 @@ $app = new \Slim\Slim(array(
  */
 $db = new medoo(Config::database());
 
+$db->query('SET SQL_MODE=ANSI_QUOTES');
+
 /**
  * @var Session
  */
@@ -185,12 +187,14 @@ $app->get('/groups', function() use($app) {
 });
 
 
-$app->get('/admin/results', function() {
+$app->get('/admin/results', function() use($app) {
     if(!checkAdminAuth()) {
         return;
     }
 
-    $response = AdminHelpers::getResults();
+    $filters = $app->request()->get();
+
+    $response = AdminHelpers::getResults($filters);
 
     Helpers::sendJson($response);
 });

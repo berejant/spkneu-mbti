@@ -4,7 +4,9 @@
         <div class="result-table admin-results">
             <div class="row header">
                 <div class="col col-20">
-                    Група
+                    <select ng-model="filters.groupId" class="input-small" ng-options="key as value.name for (key,value) in groups">
+                        <option value="">Всі групи</option>
+                    </select>
                 </div>
                 <div class="col">
                     Студент
@@ -35,7 +37,7 @@
                 </div>
 
                 <div class="col col-20" ng-show="item.person_formula">
-                    <a ui-sref="adminResult({studentId:item.id})"><span ng-bind="item.person_formula"></span>&nbsp;<i class="ion-document-text"></i></a>
+                    <a ui-sref="adminResult({studentId:item.id})"><span ng-bind="item.person_formula"></span></a>
                 </div>
 
                 <div class="col col-20 assertive" ng-hide="item.person_formula" >Не завершено</div>

@@ -36,8 +36,8 @@ define([
         };
         $scope.result = [];
 
-        $scope.$watch('filters', function() {
-            Api.getAdminResults().then(function(result){
+        $scope.$watchCollection('filters', function(filters) {
+            Api.getAdminResults(filters).then(function(result){
                 $scope.result = result;
             }, showError);
         });
