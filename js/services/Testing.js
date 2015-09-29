@@ -71,12 +71,11 @@ define([
                 }
 
             }, function (error) {
-                console.log(error);
                 if(Object.keys(saveQueue).length) {
                     lastSaveError = error;
                 }
 
-                return error;
+                return $q.reject(error);
             });
 
             lastSaveError = null;

@@ -38,7 +38,7 @@ define([
             if(500 === response.status) {
                 return apiError(response.data && response.data.error ? response.data.error : null);
             }
-console.log(response);
+
             return $q.reject('Помилка мережі' + ( response.status>0 ||response.statusText ? ': ' + response.status + ' ' + response.statusText : ''));
         };
 
@@ -198,7 +198,6 @@ console.log(response);
                 return data;
             }, function(error) {
                 if(isRequestStopped) {
-                    console.log('stopped');
                     return {};
                 }
                 return $q.reject(error);
