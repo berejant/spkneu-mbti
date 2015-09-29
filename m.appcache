@@ -1,10 +1,12 @@
 CACHE MANIFEST
-# 2015-09-28 02:40:07
+# 2015-09-29 14:57:39
 ./
 lib/requirejs/require.js
 js/min.js
 css/min.css
 lib/ionic/release/fonts/ionicons.ttf?v=2.0.1
+lib/ionic/release/fonts/ionicons.woff?v=2.0.1
+
 img/loading.gif
 
 NETWORK:

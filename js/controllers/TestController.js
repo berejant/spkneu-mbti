@@ -23,10 +23,15 @@ define([
         };
 
         var goToNextQuestion = function(locationMode, waitingMoveToResultPagePromise) {
-            return Testing.getFirstUnansweredQuestionId($scope.question.id).then(function(questionId){
+            return Testing.getFirstUnansweredQuestionId().then(function(questionId){
                 if(questionId !== null) {
                     return $state.go($state.current.name, {questionId: questionId}, {location: locationMode});
                 } else {
+                    $ionicLoading.show({
+                        hideOnStateChange: true,
+                        template: loadingTemplate
+                    });
+
                     return $q.when(waitingMoveToResultPagePromise).then(function(){
                         return $state.go('result', {}, {location:locationMode});
                     });

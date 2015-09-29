@@ -38,7 +38,7 @@ define([
             if(500 === response.status) {
                 return apiError(response.data && response.data.error ? response.data.error : null);
             }
-
+console.log(response);
             return $q.reject('Помилка мережі' + ( response.status>0 ||response.statusText ? ': ' + response.status + ' ' + response.statusText : ''));
         };
 
@@ -121,7 +121,7 @@ define([
                 session = {
                     token: data.token,
                     userType: data.user_type,
-                    expire: Math.floor((new Date).getTime() / 1E3) + data.timeout,
+                    expire: Math.floor((new Date).getTime() / 1E3) + data.timeout
                 };
 
                 localStorageService.set('session', session);
@@ -130,6 +130,7 @@ define([
                     localStorageService.set('isTestCompleted', true);
                 }
 
+                return true;
             });
         };
 
@@ -176,20 +177,31 @@ define([
                 service.saveAnswer.lastRequestStop.resolve();
             }
 
-            service.saveAnswer.lastRequestStop = $q.defer();
-
             var request = getHttpRequest();
 
             request.url += 'answers';
             request.method = "POST";
             request.data = data;
 
+            var isRequestStopped = false;
+
+            service.saveAnswer.lastRequestStop = $q.defer();
             request.timeout = service.saveAnswer.lastRequestStop.promise;
+            request.timeout.then(function(){
+                isRequestStopped = true;
+            })
 
             return executeHttp(request).then(function (data) {
+                session.answers =  session.answers || {};
                 angular.extend(session.answers, data);
 
                 return data;
+            }, function(error) {
+                if(isRequestStopped) {
+                    console.log('stopped');
+                    return {};
+                }
+                return $q.reject(error);
             });
 
         };

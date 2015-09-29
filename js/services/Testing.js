@@ -13,10 +13,11 @@ define([
      *
      * @param {angular.Api} Api
      * @param {angular.$q} $q
+     * @param {angular.localStorageService} localStorageService
      * @ngInject
      * @constructor
      */
-    var Testing = function (Api, $q) {
+    var Testing = function (Api, $q, localStorageService) {
 
         var service = {};
 
@@ -44,21 +45,33 @@ define([
 
 
         var lastSaveError = null;
-        var saveQueue = {};
+        var storageSaveQueueKey = 'answersSaveQueue';
+        var saveQueue = localStorageService.get(storageSaveQueueKey) || {};
 
         service.saveAnswer = function(question) {
-            saveQueue[question.id] = question.selectedAnswerId;
+            if(question) {
+                saveQueue[question.id] = question.selectedAnswerId;
+                localStorageService.set(storageSaveQueueKey, saveQueue);
+            }
 
             var promise = Api.saveAnswer(saveQueue).then(function(responseData) {
                 lastSaveError = null;
 
                 // умная система отправки данных, для того чтобы в случае ошибок - данные сохранились при следующем вызове
-                angular.forEach(responseData, function(value, key){
-                    if(saveQueue[key] === value) {
+                angular.forEach(responseData, function (value, key) {
+                    if (saveQueue[key] === value) {
                         delete saveQueue[key];
                     }
                 });
+
+                if (Object.keys(saveQueue).length) {
+                    localStorageService.set(storageSaveQueueKey, saveQueue);
+                } else {
+                    localStorageService.remove(storageSaveQueueKey);
+                }
+
             }, function (error) {
+                console.log(error);
                 if(Object.keys(saveQueue).length) {
                     lastSaveError = error;
                 }
@@ -71,14 +84,19 @@ define([
             return promise;
         };
 
+        if (Object.keys(saveQueue).length) {
+            // если есть ответы к сохранению (из хранилища сессии) - запускаем функцию для сохранение результатов
+            service.saveAnswer();
+        }
+
         service.getLastServiceError = function () {
             return lastSaveError;
         };
 
-        service.getFirstUnansweredQuestionId = function (ignoreQuestionId) {
+        service.getFirstUnansweredQuestionId = function () {
             return Api.getAnswers().then(function (answers) {
                 for (var questionId in questions) {
-                    if (questionId !== ignoreQuestionId && questions.hasOwnProperty(questionId) && angular.isUndefined(answers[questionId])) {
+                    if (questions.hasOwnProperty(questionId) && angular.isUndefined(answers[questionId]) && angular.isUndefined(saveQueue[questionId])) {
                         return questionId;
                     }
                 }

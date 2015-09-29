@@ -62,7 +62,7 @@ define([
             } else if(Api.isLogged()) {
                 return $q.when();
             } else {
-                return $q.defer().promise;
+                return $q.when(false);
             }
         }
 

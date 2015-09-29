@@ -1,10 +1,12 @@
 <ion-view view-title="{{title}} - Вхід" class="text-center">
-    <ion-content scroll="false">
+    <ion-content scroll="false" style="padding-top:30px;">
 
-        <button ng-click="oauthStart()" class="button button-balanced button-positive" style="margin-top:30px;">
+        <button ng-show="showLoginButton" ng-click="oauthStart()" class="button button-balanced button-positive">
             <i class="icon ion-log-in"></i>
             Увійти через сайт КНЕУ
         </button>
+
+        <ion-spinner ng-hide="showLoginButton" icon="bubbles"></ion-spinner>
 
     </ion-content>
 </ion-view>
