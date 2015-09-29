@@ -1,0 +1,60 @@
+<ion-view view-title="{{title}} - Адмінка" class="text-center" hide-back-button="{{hideBackButton}}" cache-view="false">
+    <ion-content>
+
+        <div class="result-table admin-results">
+            <div class="row header">
+                <div class="col col-20">
+                    Група
+                </div>
+                <div class="col">
+                    Студент
+                </div>
+                <div class="col col-20">
+                    Формула
+                </div>
+
+                <div class="col">
+                    Тип
+                </div>
+
+                <div class="col">
+                    Опис
+                </div>
+
+                <div class="col col-10"></div>
+            </div>
+
+            <div class="row" ng-repeat="item in result">
+
+                <div class="col col-20">
+                    <span ng-bind="groups[item.group_id].name"></span>
+                </div>
+
+                <div class="col">
+                    {{item.last_name}} {{item.first_name|limitTo:1}}.{{item.middle_name|limitTo:1}}
+                </div>
+
+                <div class="col col-20" ng-show="item.person_formula">
+                    <a ui-sref="adminResult({studentId:item.id})"><span ng-bind="item.person_formula"></span>&nbsp;<i class="ion-document-text"></i></a>
+                </div>
+
+                <div class="col col-20 assertive" ng-hide="item.person_formula" >Не завершено</div>
+
+                <div class="col">
+                    <span ng-bind="personTypes[item.person_formula].alias"></span>
+                </div>
+
+                <div class="col">
+                    <span ng-bind="personTypes[item.person_formula].description"></span>
+                </div>
+
+                <div class="col col-10">
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+
+    </ion-content>
+</ion-view>

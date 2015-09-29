@@ -41,6 +41,16 @@ define([
                 template: resultTemplate,
                 controller: 'ResultController'
             })
+            .state('admin', {
+                url: "/admin",
+                templateUrl: "partials/admin/main.html",
+                controller: 'AdminController'
+            })
+            .state('adminResult', {
+                url: "/admin/result/:studentId",
+                template: resultTemplate,
+                controller: 'AdminResultController'
+            });
     };
 
     return app.config(config);

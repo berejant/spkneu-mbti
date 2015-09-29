@@ -38,6 +38,27 @@ function checkAuth () {
     return true;
 }
 
+function checkAdminAuth() {
+    if(!checkAuth()) {
+        return false;
+    }
+
+    global $session, $app;
+
+    if('admin' !== $session->getUserType ())  {
+        Helpers::sendJson(array(
+            'error' => array(
+                'error_code' => 'forbidden',
+                'error_msg' => 'Доступ мають лише адміністратори'
+            )
+        ));
+
+        return false;
+    }
+
+    return true;
+}
+
 $app->error(function (\Exception $e) use ($app) {
 
     $log = date('[Y-m-d H:i:s]') . ' PHP error: ' . $e->getMessage() . ' at ' . $e->getFile() . ' line ' .  $e->getLine();
@@ -59,7 +80,6 @@ $app->error(function (\Exception $e) use ($app) {
 });
 
 $app->notFound(function() use($app) {
-
     $app->response->setStatus(200);
 
     Helpers::sendJson(array(
@@ -68,6 +88,8 @@ $app->notFound(function() use($app) {
             'error_msg' => 'Not Found'
         )
     ));
+
+    $app->stop();
 });
 
 
@@ -148,6 +170,40 @@ $app->delete('/result', function() use ($session) {
     Helpers::sendJson(array(
         'status' => $status
     ));
+});
+
+$app->get('/groups', function() use($app) {
+    if(!checkAdminAuth()) {
+        return;
+    }
+
+    $app->etag('groups');
+    $app->expires('+15 minutes');
+
+    Helpers::sendJson(AdminHelpers::getGroups());
+
+});
+
+
+$app->get('/admin/results', function() {
+    if(!checkAdminAuth()) {
+        return;
+    }
+
+    $response = AdminHelpers::getResults();
+
+    Helpers::sendJson($response);
+});
+
+
+$app->get('/admin/result/:studentId', function($studentId) {
+    if(!checkAdminAuth()) {
+        return;
+    }
+
+    $response = User::findByStudentId($studentId)->getTestResult();
+
+    Helpers::sendJson($response);
 });
 
 $app->run();

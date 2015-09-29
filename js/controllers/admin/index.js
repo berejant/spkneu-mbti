@@ -1,0 +1,4 @@
+define([
+    './MainController',
+    './AdminResultController'
+], function () {});

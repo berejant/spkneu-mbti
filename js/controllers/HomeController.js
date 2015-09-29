@@ -14,6 +14,12 @@ define(['./module'], function (controllers) {
      * @ngInject
      */
     var HomeController = function ($scope, $state, $ionicHistory, $ionicPopup, Api, Testing) {
+
+        if(Api.getUserType() === 'admin') {
+            $state.go('admin', {}, {location:'replace'});
+            return;
+        }
+
         $scope.hideBackButton = $ionicHistory.backView() ? 'login' == $ionicHistory.backView().stateId : false;
 
         $scope.isTestCompleted = Api.getIsTestCompleted();

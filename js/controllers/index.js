@@ -2,5 +2,6 @@ define([
     './HomeController',
     './LoginController',
     './TestController',
-    './ResultController'
+    './ResultController',
+    './admin/index', // из админки только один файл
 ], function () {});

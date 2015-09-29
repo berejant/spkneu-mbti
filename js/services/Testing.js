@@ -119,6 +119,20 @@ define([
             });
         };
 
+        service.getPersonTypes = function () {
+            return personTypes;
+        }
+
+
+        service.getAdminResult = function(studentId) {
+            return Api.getAdminResult(studentId).then(function(result){
+                result.personType = personTypes[result.formula];
+
+                return result;
+            });
+        }
+
+
         return service;
     };
 

@@ -15,6 +15,6 @@ class Helpers
         $response = \Slim\Slim::getInstance()->response;
 
         $response->headers->set('Content-Type', 'application/json');
-        $response->setBody(json_encode($data));
+        $response->setBody(json_encode($data, defined('JSON_UNESCAPED_UNICODE') ? JSON_UNESCAPED_UNICODE : null));
     }
 }

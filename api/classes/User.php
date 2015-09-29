@@ -173,4 +173,25 @@ class User
         return (bool)$db->get('mbti_student', 'person_formula', array('user_id' => $this->id));
     }
 
+    public static function findByStudentId($studentId) {
+        global $db;
+
+        if(!is_numeric($studentId)) {
+            throw new \Exception('Bad student id #' . $studentId);
+        }
+
+        $studentId = (int)$studentId;
+
+        $userId = $db->get('mbti_student', 'user_id', array('id' => $studentId));
+
+        if(!$userId) {
+            throw new \Exception('Not found student #' . $studentId);
+        }
+
+        $user = new static($userId, 'student');
+        $user->studentId = $studentId;
+
+        return $user;
+    }
+
 }

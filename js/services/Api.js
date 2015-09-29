@@ -151,7 +151,11 @@ define([
             }
 
             return true;
-        }
+        };
+
+        service.getUserType= function () {
+            return session ? session.userType : null;
+        };
 
         /**
          * Получить ответы пользователя
@@ -189,7 +193,7 @@ define([
             request.timeout = service.saveAnswer.lastRequestStop.promise;
             request.timeout.then(function(){
                 isRequestStopped = true;
-            })
+            });
 
             return executeHttp(request).then(function (data) {
                 session.answers =  session.answers || {};
@@ -214,11 +218,11 @@ define([
 
                 return result;
             });
-        }
+        };
 
         service.getIsTestCompleted = function () {
             return !!localStorageService.get('isTestCompleted');
-        }
+        };
 
         service.resetResult = function() {
             var request = getHttpRequest();
@@ -230,8 +234,42 @@ define([
                 localStorageService.remove('isTestCompleted');
                 delete session.answers;
             });
-        }
+        };
 
+        service.getGroups = function () {
+            if(service.getUserType() !== 'admin') {
+                return $q.reject('Доступ мають лише адмінстартори');
+            }
+
+
+            var request = getHttpRequest();
+            request.url += 'groups';
+
+            return executeHttp(request);
+        };
+
+        service.getAdminResults = function () {
+            if(service.getUserType() !== 'admin') {
+                return $q.reject('Доступ мають лише адмінстартори');
+            }
+
+            var request = getHttpRequest();
+            request.url += 'admin/results';
+
+            return executeHttp(request);
+
+        };
+
+        service.getAdminResult = function (studentId) {
+            if(service.getUserType() !== 'admin') {
+                return $q.reject('Доступ мають лише адмінстартори');
+            }
+
+            var request = getHttpRequest();
+            request.url += 'admin/result/' + studentId;
+
+            return executeHttp(request);
+        };
 
         return service;
     };
