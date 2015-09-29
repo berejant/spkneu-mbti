@@ -3,13 +3,19 @@
 cd `dirname ${BASH_SOURCE[0]}` ;
 cd ..;
 
-r.js -o cssIn=css/main.css out=css/min.css optimizeCss=default logLevel=4
+# минификации CSS
+r.js -o cssIn=css/main.css out=css/tmp.min.css optimizeCss=default logLevel=4
+# вырезаем комментарии
+cat css/tmp.min.css | sed 's/\/\*.*\*\/\s*//' > css/min.css
+rm css/tmp.min.css
 
+# минификация JS
 r.js -o build.js out=stdout logLevel=4 \
   | sed 's/\@license//' \
   | java -jar api/vendor/bin/compiler.jar \
    --js_output_file js/min.js --warning_level QUIET --angular_pass --jscomp_off internetExplorerChecks
 
+# обновляем application cache файл
 APPCACHE=m.appcache
 
 echo 'CACHE MANIFEST' > $APPCACHE
