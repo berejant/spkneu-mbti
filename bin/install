@@ -38,4 +38,5 @@ then
 fi
 
 chmod a+w sessions
+chmod a+w logs
 
