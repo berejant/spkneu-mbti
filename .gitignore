@@ -7,3 +7,8 @@ api/config/oauth.php
 
 api/sessions/*
 api/sessions/!.gitkeep
+
+
+api/logs/*
+api/logs/!.gitkeep
+

@@ -6,7 +6,9 @@ require 'vendor/autoload.php';
  * @var \Slim\Slim
  */
 $app = new \Slim\Slim(array(
-    'debug' => false
+    'debug' => false,
+    'log.enabled' => true,
+    'log.level' => \Slim\Log::DEBUG
 ));
 
 /**
@@ -37,6 +39,14 @@ function checkAuth () {
 }
 
 $app->error(function (\Exception $e) use ($app) {
+
+    $log = date('[Y-m-d H:i:s]') . ' PHP error: ' . $e->getMessage() . ' at ' . $e->getFile() . ' line ' .  $e->getLine();
+
+    if(!empty($_SERVER['REQUEST_URI'])) {
+        $log .= ', HTTP ' . $_SERVER['REQUEST_METHOD'] . ' ' . $_SERVER['REQUEST_URI'];
+    }
+
+    file_put_contents(__DIR__ . '/logs/error.log', $log . PHP_EOL, FILE_APPEND);
 
     $app->response->setStatus(200);
 
