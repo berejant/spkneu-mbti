@@ -144,7 +144,9 @@ class TestResult
                 $_minExpression = min($_minExpression, $sectionExpression);
             }
 
-            $sectionGroupIsExpressed[$sectionGroupKey] = $_maxExpression / $_minExpression > 2;
+            // ярко выраженный результат - эсли одна шкала превосходит другую в более чем два раза.
+            // Также, в случае если меньшая шкала = 0, то значит большая шкала - ярко выраженна
+            $sectionGroupIsExpressed[$sectionGroupKey] =  $_minExpression ? $_maxExpression / $_minExpression > 2 : true;
         }
 
         $formula = implode('', $sectionGroupDominants);
