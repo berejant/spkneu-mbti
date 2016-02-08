@@ -1,4 +1,5 @@
 AddType text/cache-manifest .appcache
+DirectoryIndex index.html
 
 
 ####################
